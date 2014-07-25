@@ -41,8 +41,8 @@
 
     dg.Grid = function(){
         var self = this;
-        self.rowCount = ko.observable(7);
-        self.colCount = ko.observable(25);
+        self.rowCount = ko.observable(6);
+        self.colCount = ko.observable(21);
         
         self.cellWidth = ko.observable(10);        
         self.cellWidthPx = ko.computed(function() { return self.cellWidth() + "px"; });
@@ -114,9 +114,20 @@
                 self.activeCell(null);
             }
         };
-                
+        
+        self.scale = ko.computed(function() {
+            var normalDotaScale = 0.390228, normalDotaCols = 21, normalDotaRows = 6;
+            var xRatio = normalDotaCols / self.colCount();
+            var yRatio = normalDotaRows / self.rowCount();
+            
+            var ratio = xRatio < yRatio ? xRatio : yRatio;
+            
+            return normalDotaScale * ratio;
+        });
+        
         self.gridfile = ko.computed(function() {
             var rowCount = self.rowCount(), colCount = self.colCount();
+            var scale = self.scale();
             var file = '"fulldeck_layout.txt"\n{\n';
             
             var heroes = self.heroList();
@@ -126,7 +137,7 @@
                 file += '\t\t"HeroID"\t\t"' + heroes[i].id + '"\n';
                 file += '\t\t"x"\t\t"' + heroes[i].getX(colCount) + '"\n';
                 file += '\t\t"y"\t\t"' + heroes[i].getY(rowCount) + '"\n';
-                file += '\t\t"scale"\t\t"0.390228"\n';
+                file += '\t\t"scale"\t\t"' + scale + '"\n';
                 file += '\t\t"zpos"\t\t"0"\n';            
                 file += '\t}\n';
             }
