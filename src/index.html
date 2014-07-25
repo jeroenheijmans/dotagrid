@@ -36,7 +36,7 @@
             <div class="col-xs-12">
                 <table class="dotaGrid">
                     <tbody data-bind="foreach: rows">
-                        <tr data-bind="foreach: cols">
+                        <tr data-bind="foreach: cells">
                             <td data-bind="style: { width: $root.cellWidthPx, height: $root.cellHeightPx }">
                                 <!-- ko with: hero -->
                                 <img data-bind="attr: {title: tooltip, src: imageSrc},

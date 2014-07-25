@@ -15,9 +15,9 @@
         self.hero = ko.observable(hero);
     };
 
-    dg.Row = function(cols) {
+    dg.Row = function() {
         var self = this;
-        self.cols = ko.observableArray(cols);
+        self.cells = ko.observableArray([]);
     };
 
     dg.Grid = function(){
@@ -32,6 +32,8 @@
         
         self.rows = ko.observableArray([]);
         
+        self.heroList = ko.observableArray([]);
+                
         self.resizeGrid = function(){
             self.rows.removeAll();
             self.cellWidth(960 / self.colCount());
@@ -40,19 +42,25 @@
             var i = 0;
             
             for (var r = 0; r < self.rowCount(); r++) {
-                var cols = [];
+                var row = new dg.Row();
+                
                 for (var c = 0; c < self.colCount(); c++) {
-                    var hero = !!tempHeroes[i] ? new dg.Hero(r, c, tempHeroes[i]) : null;
-                    i++;
-                    cols.push(new dg.Cell(hero));
+                    var hero = null;
+                    
+                    if (!!tempHeroes[i]) {
+                        hero = new dg.Hero(r, c, tempHeroes[i]);
+                        self.heroList.push(hero);
+                        i++;
+                    }
+                    
+                    row.cells.push(new dg.Cell(hero));
                 }
-                var row = new dg.Row(cols);
+                
                 self.rows.push(row);
             }            
         }
         
-        self.resizeGrid();
-        
+        self.resizeGrid();        
     };
     
     return dg;
