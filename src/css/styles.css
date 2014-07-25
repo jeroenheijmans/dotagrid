@@ -2,6 +2,10 @@
     background-image: url('../img/bg.jpg');
 }
 
+.form-inline input[type=number] {
+    width: 5em;
+}
+
 .dotaGrid {
     padding: 5px;
     border-spacing: 2px;

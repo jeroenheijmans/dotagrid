@@ -25,7 +25,7 @@
                     <input type="number" class="form-control" data-bind="value: colCount" />
                 </div>
                 <div class="form-group">
-                    <button class="btn" data-bind="click: resizeGrid">Resize</button>
+                    <button class="btn" data-bind="click: resizeGrid">Reset grid with new dimensions</button>
                 </div>
             </div>
         </div>
@@ -39,7 +39,7 @@
                         <tr data-bind="foreach: cols">
                             <td data-bind="style: { width: $root.cellWidthPx, height: $root.cellHeightPx }">
                                 <!-- ko with: hero -->
-                                <img data-bind="attr: {title: name, src: imageSrc},
+                                <img data-bind="attr: {title: tooltip, src: imageSrc},
                                                 style: { width: $root.cellWidthPx, height: $root.cellHeightPx }" />
                                 <!-- /ko -->
                             </td>

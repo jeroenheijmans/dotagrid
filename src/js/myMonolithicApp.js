@@ -7,6 +7,7 @@
         self.row = ko.observable(row);
         self.col = ko.observable(col);
         self.imageSrc = "http://cdn.dota2.com/apps/dota2/images/heroes/" + self.key + "_vert.jpg";
+        self.tooltip = hero.name + " (" + hero.atk + ", " + hero.roles.join(", ") + ")";
     };    
 
     dg.Cell = function(hero) {
