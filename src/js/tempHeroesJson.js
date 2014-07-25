@@ -1412,4 +1412,5 @@ for (hero in tempHeroesJson) {
     }
 }
 
-var defaultModel = {"rowCount":6, "colCount":21, "heroes": []};
+globalAvailableHeroes.sort(function(x,y) { return x.name.localeCompare(y.name); });
+var defaultModel = {"rowCount": 8, "colCount": 24, "heroes": []};

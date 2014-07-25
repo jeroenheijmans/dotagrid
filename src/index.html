@@ -52,6 +52,8 @@
         </div>
         
         <hr />
+
+        <p class="alert alert-warning"><strong>Important!</strong> DotaGrid is in pre-alpha stage, no guarantees are made that you'll be able to load this code in later versions of DotaGrid. Use at own risk.</p>        
         
         <div class="row">
             <div class="col-sm-4">
@@ -62,11 +64,17 @@
             <div class="col-sm-4">
                 <h3>Save DotaGrid</h3>
                 <p>Save the code below to load it later on. In this alpha version you'll have to use the clipboard.</p>
-                <p><button class="btn" data-bind="click: exportDgFileToClipboard">Save Grid</button></p>
+                <div class="form-group">
+                    <textarea class="form-control savefile" data-bind="value: fileToSave"></textarea>
+                </div>
+            </div>
+            <div class="col-sm-4">
                 <h3>Load DotaGrid</h3>
-                <p>Load a saved grid.</p>
-                <p><button class="btn" data-bind="click: importDgFile">Load Grid</button></p>
-                <p class="alert alert-warning"><strong>Important!</strong> DotaGrid is in pre-alpha stage, no guarantees are made that you'll be able to load this code in later versions of DotaGrid. Use at own risk.</p>
+                <p>Load a saved grid. Paste saved DotaGrid data below:</p>
+                <div class="form-group">
+                    <textarea class="form-control loadfile" data-bind="value: fileToLoad"></textarea>
+                </div>
+                <p><button class="btn" data-bind="click: loadDgFile">Load Grid</button></p>
             </div>
         </div>
         

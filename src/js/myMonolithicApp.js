@@ -84,6 +84,8 @@
                 
                 self.rows.push(row);
             }
+            
+            loadHeroes(model.heroes);
         }
         
         function findEmptyCell() {
@@ -123,7 +125,6 @@
         };
         
         self.resetGrid();
-        loadHeroes(model.heroes);
         
         self.activateCell = function (cell) {        
             if (self.activeCell() === null) {
@@ -189,7 +190,7 @@
             return file;
         }).extend({throttle: 200});
         
-        function dgFile() {
+        self.fileToSave = ko.computed(function() {
             var data = {
                 rowCount: self.rowCount(),
                 colCount: self.colCount(),
@@ -204,9 +205,17 @@
             
             var result = JSON.stringify(data);
             return result;
+        });
+        
+        self.saveDgFile = function() {
+            window.prompt("Press CTRL+C to copy the file contents to the clipboard:", self.fileToSave());
         };
         
-        function loadDgfile(file) {
+        self.fileToLoad = ko.observable();
+        
+        self.loadDgFile = function() {
+            var file = self.fileToLoad();
+            if (!file) { return; }
             var data = JSON.parse(file);
             self.rowCount(data.rowCount);
             self.colCount(data.colCount);

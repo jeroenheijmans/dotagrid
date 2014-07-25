@@ -38,8 +38,12 @@
     border-color: #666;
 }
 
-textarea.gridfile {
+textarea.gridfile, textarea.loadfile, textarea.savefile {
     height: 18em;
     font-family: consolas;
     font-size: 8pt;
+}
+
+textarea.loadfile {
+    height: 13em;
 }
