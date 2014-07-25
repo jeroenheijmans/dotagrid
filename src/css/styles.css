@@ -1,15 +1,17 @@
 ﻿body {
     background-image: url('../img/bg.jpg');
-    color: white;
 }
 
 .dotaGrid {
     padding: 5px;
+    border-spacing: 2px;
+    border-collapse: separate;
+    background-color: transparent;
 }
 
 .dotaGrid td {
-    background-color: rgba(25,25,25,0.5);
-    border: 1px solid #AAA;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
     text-align: center;
     vertical-align: middle;
     font-size: 0.65em;

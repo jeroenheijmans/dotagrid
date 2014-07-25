@@ -24,6 +24,9 @@
                     <label for="cols">Columns</label>
                     <input type="number" class="form-control" data-bind="value: colCount" />
                 </div>
+                <div class="form-group">
+                    <button class="btn" data-bind="click: resizeGrid">Resize</button>
+                </div>
             </div>
         </div>
         
@@ -36,7 +39,8 @@
                         <tr data-bind="foreach: cols">
                             <td data-bind="style: { width: $root.cellWidthPx, height: $root.cellHeightPx }">
                                 <!-- ko with: hero -->
-                                <span data-bind="text: id"></span>
+                                <img data-bind="attr: {title: name, src: imageSrc},
+                                                style: { width: $root.cellWidthPx, height: $root.cellHeightPx }" />
                                 <!-- /ko -->
                             </td>
                         </tr>
@@ -48,6 +52,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script src="js/knockout-3.1.0.js"></script>
+        <script src="js/tempHeroesJson.js"></script>
         <script src="js/myMonolithicApp.js"></script>
     </body>
 </html>
