@@ -29,7 +29,8 @@
         self.cellWidthPx = ko.computed(function() { return self.cellWidth() + "px"; });
         self.cellHeight = ko.observable(12);
         self.cellHeightPx = ko.computed(function() { return self.cellHeight() + "px"; });
-        
+                
+        self.activeCell = ko.observable(null);
         self.rows = ko.observableArray([]);
         
         self.heroList = ko.observableArray([]);
@@ -61,6 +62,22 @@
         }
         
         self.resizeGrid();        
+        
+        self.activateCell = function (cell) {        
+            if (self.activeCell() === null) {
+                self.activeCell(cell);
+            } 
+            else if (self.activeCell() === cell) {
+                self.activeCell(null);
+            } 
+            else {
+                sourceHero = self.activeCell().hero();
+                targetHero = cell.hero();
+                self.activeCell().hero(targetHero);
+                cell.hero(sourceHero);
+                self.activeCell(null);
+            }
+        };
     };
     
     return dg;

@@ -20,3 +20,23 @@
     vertical-align: middle;
     font-size: 0.65em;
 }
+
+.dotaGrid td img {
+    opacity: 1.0;
+}
+
+.dotaGrid td.active img {
+    opacity: 0.3;
+}
+
+.dotaGrid td.active {
+    border: 1px solid red;
+}
+
+.dotaGrid td:hover {
+    cursor: pointer;
+    border-color: #666;
+}
+
+.dotaGrid td:hover {
+}
