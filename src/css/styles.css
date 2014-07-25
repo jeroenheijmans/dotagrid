@@ -1,0 +1,16 @@
+﻿body {
+    background-image: url('../img/bg.jpg');
+    color: white;
+}
+
+.dotaGrid {
+    padding: 5px;
+}
+
+.dotaGrid td {
+    background-color: rgba(25,25,25,0.5);
+    border: 1px solid #AAA;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 0.65em;
+}
