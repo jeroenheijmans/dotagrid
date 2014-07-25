@@ -38,5 +38,8 @@
     border-color: #666;
 }
 
-.dotaGrid td:hover {
+textarea.gridfile {
+    height: 18em;
+    font-family: consolas;
+    font-size: 8pt;
 }

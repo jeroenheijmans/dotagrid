@@ -2,16 +2,35 @@
 
     dg.Hero = function(row, col, hero) {
         var self = this;
+        self.id = hero.id;
         self.key = hero.key;
         self.name = hero.name;
         self.row = ko.observable(row);
         self.col = ko.observable(col);
         self.imageSrc = "http://cdn.dota2.com/apps/dota2/images/heroes/" + self.key + "_vert.jpg";
         self.tooltip = hero.name + " (" + hero.atk + ", " + hero.roles.join(", ") + ")";
+        
+        self.getX = function(colCount) {
+            var min = -27.200001,
+                max = 1037.550049,
+                range = max - min;
+            if (self.id == 102) { console.log(colCount ); }
+            return min + (self.col() / (colCount-1) * range);
+        }
+        
+        self.getY = function(rowCount) {
+            var min = 36.099998,
+                max = 305.700012,
+                range = max - min;
+            
+            return min + (self.row() / (rowCount-1) * range);
+        }
     };    
 
-    dg.Cell = function(hero) {
+    dg.Cell = function(row, col, hero) {
         var self = this;
+        self.row = row;
+        self.col = col;
         self.hero = ko.observable(hero);
     };
 
@@ -54,7 +73,7 @@
                         i++;
                     }
                     
-                    row.cells.push(new dg.Cell(hero));
+                    row.cells.push(new dg.Cell(r, c, hero));
                 }
                 
                 self.rows.push(row);
@@ -71,13 +90,50 @@
                 self.activeCell(null);
             } 
             else {
-                sourceHero = self.activeCell().hero();
+                var sourceCell = self.activeCell();
+                var targetCell = cell;
+            
+                sourceHero = sourceCell.hero();                
                 targetHero = cell.hero();
-                self.activeCell().hero(targetHero);
-                cell.hero(sourceHero);
+                
+                if (!!sourceHero) {
+                    sourceHero.row(targetCell.row);
+                    sourceHero.col(targetCell.col);
+                }
+                
+                if (!!targetHero) {
+                    targetHero.row(sourceCell.row);
+                    targetHero.col(sourceCell.col);
+                }
+                
+                // Switch cells' references to heroes:
+                sourceCell.hero(targetHero);
+                targetCell.hero(sourceHero);
+                
+                // Clear active cell:
                 self.activeCell(null);
             }
         };
+                
+        self.gridfile = ko.computed(function() {
+            var rowCount = self.rowCount(), colCount = self.colCount();
+            var file = '"fulldeck_layout.txt"\n{\n';
+            
+            var heroes = self.heroList();
+            for (var i = 0; i < heroes.length; i++) {
+                file += '\t"' + i + '"\n';
+                file += '\t{\n';
+                file += '\t\t"HeroID"\t\t"' + heroes[i].id + '"\n';
+                file += '\t\t"x"\t\t"' + heroes[i].getX(colCount) + '"\n';
+                file += '\t\t"y"\t\t"' + heroes[i].getY(rowCount) + '"\n';
+                file += '\t\t"scale"\t\t"0.390228"\n';
+                file += '\t\t"zpos"\t\t"0"\n';            
+                file += '\t}\n';
+            }
+            
+            file = file + "}";            
+            return file;
+        }).extend({throttle: 200});
     };
     
     return dg;
