@@ -1,4 +1,4 @@
-// This is just a temporary solution, need to find a better way to get up to date info.
+﻿// This is just a temporary solution, need to find a better way to get up to date info.
 var tempHeroesJson = {
   "antimage": {
     "name": "Anti-Mage",
@@ -1396,20 +1396,20 @@ var tempHeroesWithIds = [
     }
 ];
 
-var tempHeroes = [];
+var globalAvailableHeroes = [];
 
 for (hero in tempHeroesJson) {
     if( tempHeroesJson.hasOwnProperty( hero ) ) {
-        var matches = $.grep(tempHeroesWithIds, function(item) { return item.name.indexOf(hero) > -1; });
-        var matchedId = null;
+        var matches = $.grep(tempHeroesWithIds, function(item) { return item.name === ("npc_dota_hero_" + hero); });
+        var heroID = null;
         
-        if (matches.length === 1) {
-            matchedId = matches[0].id;
-        } else { console.log(hero + " gave " + matches.length + " results, only");}
+        if (matches.length !== 1) {
+            throw (hero + " gave " + matches.length + " results, only"); 
+        }
         
-        var hero = $.extend({ key: hero, id: matchedId }, tempHeroesJson[hero]);
-        tempHeroes.push(hero);
+        heroID = matches[0].id;        
+        globalAvailableHeroes.push($.extend({ key: hero, id: heroID }, tempHeroesJson[hero]));
     }
 }
 
-tempHeroes.sort(function(x,y) { return x.name.localeCompare(y.name); });
+var defaultModel = {"rowCount":6, "colCount":21, "heroes": []};

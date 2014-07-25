@@ -25,7 +25,7 @@
                     <input type="number" class="form-control" data-bind="value: colCount" />
                 </div>
                 <div class="form-group">
-                    <button class="btn" data-bind="click: resizeGrid">Reset grid with new dimensions</button>
+                    <button class="btn" data-bind="click: resetGrid">Reset grid with new dimensions</button>
                 </div>
             </div>
         </div>
@@ -54,8 +54,19 @@
         <hr />
         
         <div class="row">
-            <div class="col-xs-12">
-                <textarea class="form-control gridfile" data-bind="text: gridfile" spellcheck="false"></textarea>
+            <div class="col-sm-4">
+                <h3>Dota Layout File Format</h3>
+                <p>Copy paste the following to a file into a "/dota/cfg/layouts/yourfilename.txt" file.</p>
+                <textarea class="form-control gridfile" data-bind="value: gridfile" spellcheck="false"></textarea>
+            </div>
+            <div class="col-sm-4">
+                <h3>Save DotaGrid</h3>
+                <p>Save the code below to load it later on. In this alpha version you'll have to use the clipboard.</p>
+                <p><button class="btn" data-bind="click: exportDgFileToClipboard">Save Grid</button></p>
+                <h3>Load DotaGrid</h3>
+                <p>Load a saved grid.</p>
+                <p><button class="btn" data-bind="click: importDgFile">Load Grid</button></p>
+                <p class="alert alert-warning"><strong>Important!</strong> DotaGrid is in pre-alpha stage, no guarantees are made that you'll be able to load this code in later versions of DotaGrid. Use at own risk.</p>
             </div>
         </div>
         

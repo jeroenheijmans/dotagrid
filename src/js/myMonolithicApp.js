@@ -14,7 +14,7 @@
             var min = -27.200001,
                 max = 1037.550049,
                 range = max - min;
-            if (self.id == 102) { console.log(colCount ); }
+                
             return min + (self.col() / (colCount-1) * range);
         }
         
@@ -25,6 +25,16 @@
             
             return min + (self.row() / (rowCount-1) * range);
         }
+        
+        self.dto = ko.computed(function() {
+            var retval = {
+                id: self.id,
+                row: self.row(),
+                col: self.col()
+            };
+            
+            return retval;
+        });
     };    
 
     dg.Cell = function(row, col, hero) {
@@ -39,10 +49,10 @@
         self.cells = ko.observableArray([]);
     };
 
-    dg.Grid = function(){
+    dg.Grid = function(model, availableHeroes){
         var self = this;
-        self.rowCount = ko.observable(6);
-        self.colCount = ko.observable(21);
+        self.rowCount = ko.observable(model.rowCount || 6);
+        self.colCount = ko.observable(model.colCount || 21);
         
         self.cellWidth = ko.observable(10);        
         self.cellWidthPx = ko.computed(function() { return self.cellWidth() + "px"; });
@@ -53,34 +63,67 @@
         self.rows = ko.observableArray([]);
         
         self.heroList = ko.observableArray([]);
-                
-        self.resizeGrid = function(){
+
+        var internalGrid = {};
+        
+        self.resetGrid = function() {
             self.rows.removeAll();
+            internalGrid = {}
             self.cellWidth(960 / self.colCount());
             self.cellHeight(self.cellWidth() * 272 / 235);
-                    
-            var i = 0;
             
             for (var r = 0; r < self.rowCount(); r++) {
                 var row = new dg.Row();
                 
                 for (var c = 0; c < self.colCount(); c++) {
-                    var hero = null;
-                    
-                    if (!!tempHeroes[i]) {
-                        hero = new dg.Hero(r, c, tempHeroes[i]);
-                        self.heroList.push(hero);
-                        i++;
-                    }
-                    
-                    row.cells.push(new dg.Cell(r, c, hero));
+                    var cell = new dg.Cell(r, c, null);
+                    row.cells.push(cell);
+                    var key = r + ";" + c;
+                    internalGrid[key] = cell;
                 }
                 
                 self.rows.push(row);
-            }            
+            }
         }
         
-        self.resizeGrid();        
+        function findEmptyCell() {
+            var rows = self.rows();
+            for (var r = 0; r < rows.length; r++) {
+                var cells = rows[r].cells();                
+                for (var c = 0; c < cells.length; c++) {
+                    if (!cells[c].hero()) {
+                        return cells[c];
+                    }
+                }
+            }
+            return null;
+        }
+        
+        var loadHeroes = function(existingHeroes) {
+            self.heroList.removeAll();
+            
+            for (var i = 0; i < availableHeroes.length; i++) {
+                var matchedExistingHeroes = $.grep(existingHeroes, function(item) { return item.id === availableHeroes[i].id; });
+                var cell = null, r, c;
+                
+                if (matchedExistingHeroes.length === 1) {
+                    r = matchedExistingHeroes[0].row;
+                    c = matchedExistingHeroes[0].col;
+                    cell = internalGrid[r + ";" + c];
+                } else {
+                    cell = findEmptyCell();
+                    r = cell.row;
+                    c = cell.col;
+                }
+                            
+                var hero = new dg.Hero(r, c, availableHeroes[i]);
+                self.heroList.push(hero);
+                cell.hero(hero);
+            }
+        };
+        
+        self.resetGrid();
+        loadHeroes(model.heroes);
         
         self.activateCell = function (cell) {        
             if (self.activeCell() === null) {
@@ -145,12 +188,49 @@
             file = file + "}";            
             return file;
         }).extend({throttle: 200});
+        
+        function dgFile() {
+            var data = {
+                rowCount: self.rowCount(),
+                colCount: self.colCount(),
+                heroes: []
+            };
+            
+            var heroes = self.heroList();
+            
+            for (var i = 0; i < heroes.length; i++) {
+                data.heroes.push(heroes[i].dto());
+            }
+            
+            var result = JSON.stringify(data);
+            return result;
+        };
+        
+        function loadDgfile(file) {
+            var data = JSON.parse(file);
+            self.rowCount(data.rowCount);
+            self.colCount(data.colCount);
+            
+            self.resetGrid();
+            loadHeroes(data.heroes);
+        };
+        
+        self.exportDgFileToClipboard = function() {
+            window.prompt("Copy to clipboard: Ctrl+C, Enter", dgFile());
+        }
+        
+        self.importDgFile = function() {
+            var data = window.prompt("Paste a saved DotaGrid config:");
+            if (!!data) {
+                loadDgfile(data);
+            }
+        }
     };
     
     return dg;
 }(dotaGrid || {}));
 
 $(document).ready(function() {
-    var vm = new dotaGrid.Grid();
+    var vm = new dotaGrid.Grid(defaultModel, globalAvailableHeroes);
     ko.applyBindings(vm);
 });
