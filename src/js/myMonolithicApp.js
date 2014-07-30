@@ -2,13 +2,14 @@
 
     dg.Hero = function(row, col, hero) {
         var self = this;
-        self.id = hero.id;
-        self.key = hero.key;
-        self.name = hero.name;
+        $.extend(self, hero);
         self.row = ko.observable(row);
         self.col = ko.observable(col);
         self.imageSrc = "http://cdn.dota2.com/apps/dota2/images/heroes/" + self.key + "_vert.jpg";
-        self.tooltip = hero.name + " (" + hero.atk + ", " + hero.roles.join(", ") + ")";
+        
+        self.tooltip = !!hero
+                       ? hero.name + " (" + hero.atk + ", " + hero.roles.join(", ") + ")"
+                       : "";           
         
         self.getX = function(colCount) {
             var min = -27.200001,
@@ -42,11 +43,9 @@
         self.row = row;
         self.col = col;
         self.hero = ko.observable(hero);
-    };
-
-    dg.Row = function() {
-        var self = this;
-        self.cells = ko.observableArray([]);
+        self.hasHero = ko.computed(function() { return !!self.hero(); });
+        self.top = ((row / 6) * 100) + "%"; // TODO
+        self.left = ((col / 21) * 100) + "%"; // TODO
     };
 
     dg.Grid = function(model, availableHeroes){
@@ -60,50 +59,43 @@
         self.cellHeightPx = ko.computed(function() { return self.cellHeight() + "px"; });
                 
         self.activeCell = ko.observable(null);
-        self.rows = ko.observableArray([]);
-        
-        self.heroList = ko.observableArray([]);
+        self.cells = ko.observableArray([]);
 
         var internalGrid = {};
         
         self.resetGrid = function() {
-            self.rows.removeAll();
             internalGrid = {}
             self.cellWidth(960 / self.colCount());
             self.cellHeight(self.cellWidth() * 272 / 235);
             
-            for (var r = 0; r < self.rowCount(); r++) {
-                var row = new dg.Row();
-                
+            for (var r = 0; r < self.rowCount(); r++) {                
                 for (var c = 0; c < self.colCount(); c++) {
                     var cell = new dg.Cell(r, c, null);
-                    row.cells.push(cell);
                     var key = r + ";" + c;
                     internalGrid[key] = cell;
+                    self.cells.push(cell);
                 }
-                
-                self.rows.push(row);
             }
             
             loadHeroes(model.heroes);
         }
         
         function findEmptyCell() {
-            var rows = self.rows();
-            for (var r = 0; r < rows.length; r++) {
-                var cells = rows[r].cells();                
-                for (var c = 0; c < cells.length; c++) {
-                    if (!cells[c].hero()) {
-                        return cells[c];
-                    }
+            var cells = self.cells();
+            for (var i = 0; i < cells.length; i++) {
+                if (!cells[i].hero()) {
+                    return cells[i];
                 }
             }
             return null;
         }
         
-        var loadHeroes = function(existingHeroes) {
-            self.heroList.removeAll();
-            
+        function loadHeroes(existingHeroes) {
+            var cells = self.cells();
+            for (var i = 0; i < cells.length; i++) {
+                cells[i].hero(null);
+            }
+        
             for (var i = 0; i < availableHeroes.length; i++) {
                 var matchedExistingHeroes = $.grep(existingHeroes, function(item) { return item.id === availableHeroes[i].id; });
                 var cell = null, r, c;
@@ -117,9 +109,8 @@
                     r = cell.row;
                     c = cell.col;
                 }
-                            
+                
                 var hero = new dg.Hero(r, c, availableHeroes[i]);
-                self.heroList.push(hero);
                 cell.hero(hero);
             }
         };
@@ -174,16 +165,19 @@
             var scale = self.scale();
             var file = '"fulldeck_layout.txt"\n{\n';
             
-            var heroes = self.heroList();
-            for (var i = 0; i < heroes.length; i++) {
-                file += '\t"' + i + '"\n';
-                file += '\t{\n';
-                file += '\t\t"HeroID"\t\t"' + heroes[i].id + '"\n';
-                file += '\t\t"x"\t\t"' + heroes[i].getX(colCount) + '"\n';
-                file += '\t\t"y"\t\t"' + heroes[i].getY(rowCount) + '"\n';
-                file += '\t\t"scale"\t\t"' + scale + '"\n';
-                file += '\t\t"zpos"\t\t"0"\n';            
-                file += '\t}\n';
+            var cells = self.cells();
+            for (var i = 0; i < cells.length; i++) {
+                var hero = cells[i].hero();
+                if (!!hero) {
+                    file += '\t"' + i + '"\n';
+                    file += '\t{\n';
+                    file += '\t\t"HeroID"\t\t"' + hero.id + '"\n';
+                    file += '\t\t"x"\t\t"' + hero.getX(colCount) + '"\n';
+                    file += '\t\t"y"\t\t"' + hero.getY(rowCount) + '"\n';
+                    file += '\t\t"scale"\t\t"' + scale + '"\n';
+                    file += '\t\t"zpos"\t\t"0"\n';            
+                    file += '\t}\n';
+                }
             }
             
             file = file + "}";            
@@ -196,11 +190,13 @@
                 colCount: self.colCount(),
                 heroes: []
             };
-            
-            var heroes = self.heroList();
-            
-            for (var i = 0; i < heroes.length; i++) {
-                data.heroes.push(heroes[i].dto());
+                        
+            var cells = self.cells();
+            for (var i = 0; i < cells.length; i++) {
+                var hero = cells[i].hero();
+                if (!!hero) {
+                    data.heroes.push(hero.dto());
+                }
             }
             
             var result = JSON.stringify(data);

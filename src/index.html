@@ -33,21 +33,20 @@
         <hr />
         
         <div class="row">
-            <div class="col-xs-12">
-                <table class="dotaGrid">
-                    <tbody data-bind="foreach: rows">
-                        <tr data-bind="foreach: cells">
-                            <td data-bind="style: { width: $root.cellWidthPx, height: $root.cellHeightPx },
-                                           css: { active: $root.activeCell() === $data },
-                                           click: $root.activateCell">
-                                <!-- ko with: hero -->
-                                <img data-bind="attr: {title: tooltip, src: imageSrc},
-                                                style: { width: $root.cellWidthPx, height: $root.cellHeightPx }" />
-                                <!-- /ko -->
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="col-sm-8">
+                <div class="dotaGrid" data-bind="foreach: cells">
+                    <div class="cell" 
+                         data-bind="style: { width: $root.cellWidthPx, 
+                                              height: $root.cellHeightPx,
+                                              left: left,
+                                              top: top },
+                                     click: $root.activateCell">
+                    <!-- ko: if hasHero -->
+                        <span data-bind="text: $data.row"></span>
+                        <!--<img data-bind="attr: { title: tooltip, src: imageSrc }" />-->
+                    <!-- /ko -->
+                    </div>
+                </div>
             </div>
         </div>
         

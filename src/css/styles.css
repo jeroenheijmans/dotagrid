@@ -13,7 +13,8 @@
     background-color: transparent;
 }
 
-.dotaGrid td {
+.dotaGrid .cell {
+    display: inline-block;
     background-color: rgba(0, 0, 0, 0.5);
     border: 1px solid #333;
     text-align: center;
@@ -21,19 +22,19 @@
     font-size: 0.65em;
 }
 
-.dotaGrid td img {
+.dotaGrid .cell img {
     opacity: 1.0;
 }
 
-.dotaGrid td.active img {
+.dotaGrid .cell.active img {
     opacity: 0.3;
 }
 
-.dotaGrid td.active {
+.dotaGrid .cell.active {
     border: 1px solid red;
 }
 
-.dotaGrid td:hover {
+.dotaGrid .cell:hover {
     cursor: pointer;
     border-color: #666;
 }
