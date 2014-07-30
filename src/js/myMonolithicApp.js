@@ -88,6 +88,17 @@
             loadHeroes(model.heroes);
         }
         
+        function clearHeroesFromGrid() {
+            var rows = self.rows();
+            for (var r = 0; r < rows.length; r++) {
+                var cells = rows[r].cells();                
+                for (var c = 0; c < cells.length; c++) {
+                    cells[c].hero(null);
+                }
+            }
+            return null;
+        }
+        
         function findEmptyCell() {
             var rows = self.rows();
             for (var r = 0; r < rows.length; r++) {
@@ -103,6 +114,8 @@
         
         var loadHeroes = function(existingHeroes) {
             self.heroList.removeAll();
+            
+            clearHeroesFromGrid();
             
             for (var i = 0; i < availableHeroes.length; i++) {
                 var matchedExistingHeroes = $.grep(existingHeroes, function(item) { return item.id === availableHeroes[i].id; });
