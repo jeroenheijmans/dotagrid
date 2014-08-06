@@ -26,11 +26,14 @@
 }
 
 .dotaGrid td.active img {
-    opacity: 0.3;
+    opacity: 0.25;
 }
 
 .dotaGrid td.active {
     border: 1px solid red;
+}
+.dotaGrid td.dimmed img {
+    opacity: 0.5;
 }
 
 .dotaGrid td:hover {

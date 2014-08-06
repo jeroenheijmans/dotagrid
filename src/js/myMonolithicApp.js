@@ -64,8 +64,21 @@ var dotaGrid = (function (dg) {
         self.activeCell = ko.observable(null);
         self.rows = ko.observableArray([]);
         
+        self.freeTextFilter = ko.observable("");
         self.heroList = ko.observableArray([]);
-
+        
+        self.isDimmed = function(cell) {
+            if (!self.freeTextFilter()) {
+                return false;
+            }
+        
+            if (!cell.hero()) {
+                return false;
+            }
+            
+            return cell.hero().name.toLowerCase().indexOf(self.freeTextFilter().toLowerCase()) === -1;
+        };
+        
         var internalGrid = {};
         
         self.resetGrid = function() {
@@ -227,16 +240,19 @@ var dotaGrid = (function (dg) {
         };
         
         self.fileToLoad = ko.observable();
+                
+        function LoadTemplate(template) {
+            self.rowCount(template.rowCount);
+            self.colCount(template.colCount);            
+            self.resetGrid();
+            loadHeroes(template.heroes);
+        }
         
         self.loadDgFile = function() {
             var file = self.fileToLoad();
             if (!file) { return; }
             var data = JSON.parse(file);
-            self.rowCount(data.rowCount);
-            self.colCount(data.colCount);
-            
-            self.resetGrid();
-            loadHeroes(data.heroes);
+            LoadTemplate(data);
         };
         
         self.exportDgFileToClipboard = function() {
@@ -249,6 +265,11 @@ var dotaGrid = (function (dg) {
                 loadDgfile(data);
             }
         }
+        
+        self.loadAlphabetically = function() { LoadTemplate({rowCount: 7, colCount: 23, heroes: model.heroes}); };
+        self.loadColorBased = function() { LoadTemplate(globalTemplates.ColorBased); };
+        self.loadRoleAndAttack = function() { LoadTemplate(globalTemplates.RolesAndAttackType); };
+        self.loadMostPlayed = function() { LoadTemplate(globalTemplates.MostPlayed681b); };
     };
     
     return dg;
