@@ -9,8 +9,13 @@
         <link href="css/styles.css" rel="stylesheet">
     </head>
     <body class="container-fluid">
-        
+
         <h1>DotaGrid</h1>
+        <p class="alert alert-warning">
+            <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+            <strong>Important!</strong> 
+            DotaGrid is in "alpha" stage, no guarantees are made that you'll be able to load this code in later versions of DotaGrid. Use at own risk.
+        </p>
         
         <hr />
         
@@ -31,6 +36,8 @@
         </div>
         
         <hr />
+        
+        <p>Click a cell. Then click another to switch them.</p>
         
         <div class="row">
             <div class="col-xs-12">
@@ -53,30 +60,36 @@
         
         <hr />
 
-        <p class="alert alert-warning"><strong>Important!</strong> DotaGrid is in pre-alpha stage, no guarantees are made that you'll be able to load this code in later versions of DotaGrid. Use at own risk.</p>        
-        
         <div class="row">
             <div class="col-sm-4">
-                <h3>Dota Layout File Format</h3>
-                <p>Copy paste the following to a file into a "/dota/cfg/layouts/yourfilename.txt" file.</p>
+                <h4><span class="glyphicon glyphicon-floppy-disk"></span> Dota Layout File Format</h4>
+                <p>Copy-paste to e.g. <code>/dota/cfg/layouts/yourfilename.txt</code>. File has to be in <strong>ANSI encoding</strong> (often the default).</p>
                 <textarea class="form-control gridfile" data-bind="value: gridfile" spellcheck="false"></textarea>
             </div>
             <div class="col-sm-4">
-                <h3>Save DotaGrid</h3>
-                <p>Save the code below to load it later on. In this alpha version you'll have to use the clipboard.</p>
+                <h4><span class="glyphicon glyphicon-export"></span> Save DotaGrid</h4>
+                <p>Save the code below to load it later on. In this alpha version you'll have to use the clipboard and your favorite text editor.</p>
                 <div class="form-group">
                     <textarea class="form-control savefile" data-bind="value: fileToSave"></textarea>
                 </div>
             </div>
             <div class="col-sm-4">
-                <h3>Load DotaGrid</h3>
-                <p>Load a saved grid. Paste saved DotaGrid data below:</p>
+                <h4><span class="glyphicon glyphicon-import"></span> Load DotaGrid</h4>
+                <p>Load a saved grid. Paste a saved DotaGrid (text you saved from the box next to this one) into this area below and hit "Load Grid":</p>
                 <div class="form-group">
                     <textarea class="form-control loadfile" data-bind="value: fileToLoad"></textarea>
                 </div>
                 <p><button class="btn" data-bind="click: loadDgFile">Load Grid</button></p>
             </div>
         </div>
+        
+        <hr />
+        
+        <footer><small>
+            Tool and code licensed under <a href="http://opensource.org/licenses/mit-license.php">The MIT License</a>. Dota2 (all related trademarks and material) is owned by <a href="http://www.dota2.com">Valve</a>. For questions contact me at <abbr title="A simple attempt at fooling e-mail-address-spiders. Change it to a true mail address yourself ;).">dotagrid (at) jeroenheijmans (dot) nl</abbr> (though the tool is provided "AS IS", I give no guarantees about anything; the code's open source though if you want to change it yourself).
+        </small></footer>
+        
+        <br />
         
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <script src="js/bootstrap.min.js"></script>

@@ -1,4 +1,6 @@
-﻿var dotaGrid = (function (dg) {
+﻿// Code under MIT License: http://opensource.org/licenses/mit-license.php
+
+var dotaGrid = (function (dg) {
 
     dg.Hero = function(row, col, hero) {
         var self = this;
