@@ -152,8 +152,6 @@ var dotaGrid = (function (dg) {
             }
         };
         
-        self.resetGrid();
-        
         self.activateCell = function (cell) {        
             if (self.activeCell() === null) {
                 self.activeCell(cell);
@@ -267,9 +265,12 @@ var dotaGrid = (function (dg) {
         }
         
         self.loadAlphabetically = function() { LoadTemplate({rowCount: 7, colCount: 23, heroes: model.heroes}); };
+        self.loadDefault = function() { LoadTemplate(globalTemplates.Default); };
         self.loadColorBased = function() { LoadTemplate(globalTemplates.ColorBased); };
         self.loadRoleAndAttack = function() { LoadTemplate(globalTemplates.RolesAndAttackType); };
         self.loadMostPlayed = function() { LoadTemplate(globalTemplates.MostPlayed681b); };
+        
+        LoadTemplate(globalTemplates.Default);
     };
     
     return dg;
