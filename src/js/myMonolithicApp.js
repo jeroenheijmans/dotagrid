@@ -99,8 +99,6 @@ var dotaGrid = (function (dg) {
                 
                 self.rows.push(row);
             }
-            
-            loadHeroes(model.heroes);
         }
         
         function clearHeroesFromGrid() {
@@ -132,6 +130,7 @@ var dotaGrid = (function (dg) {
             
             clearHeroesFromGrid();
             
+            // First place all available heroes that are in the existingHeroes template
             for (var i = 0; i < availableHeroes.length; i++) {
                 var matchedExistingHeroes = $.grep(existingHeroes, function(item) { return item.id === availableHeroes[i].id; });
                 var cell = null, r, c;
@@ -140,15 +139,24 @@ var dotaGrid = (function (dg) {
                     r = matchedExistingHeroes[0].row;
                     c = matchedExistingHeroes[0].col;
                     cell = internalGrid[r + ";" + c];
-                } else {
-                    cell = findEmptyCell();
-                    r = cell.row;
-                    c = cell.col;
+               
+                    var hero = new dg.Hero(r, c, availableHeroes[i]);
+                    self.heroList.push(hero);
+                    cell.hero(hero);
+                } 
+            }
+            
+            // Second go backwards through available heroes that are left over, place them in open cells
+            for (var i = 0; i < availableHeroes.length; i++) {
+                var matchedExistingHeroes = $.grep(existingHeroes, function(item) { return item.id === availableHeroes[i].id; });
+                
+                if (matchedExistingHeroes.length === 0) {
+                    var cell = findEmptyCell();
+                    var hero = new dg.Hero(cell.row, cell.col, availableHeroes[i]);
+                    self.heroList.push(hero);
+                    cell.hero(hero);
                 }
-                            
-                var hero = new dg.Hero(r, c, availableHeroes[i]);
-                self.heroList.push(hero);
-                cell.hero(hero);
+                
             }
         };
         
