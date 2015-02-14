@@ -272,6 +272,7 @@ var dotaGrid = (function (dg) {
             }
         }
         
+        self.loadResizedGrid = function() { LoadTemplate({rowCount: self.rowCount(), colCount: self.colCount(), heroes: model.heroes}); };
         self.loadAlphabetically = function() { LoadTemplate({rowCount: 7, colCount: 23, heroes: model.heroes}); };
         self.loadDefault = function() { LoadTemplate(globalTemplates.Default); };
         self.loadColorBased = function() { LoadTemplate(globalTemplates.ColorBased); };
