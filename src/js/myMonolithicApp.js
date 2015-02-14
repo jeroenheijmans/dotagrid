@@ -1,5 +1,10 @@
 ﻿// Code under MIT License: http://opensource.org/licenses/mit-license.php
 
+// FAIR WARNING:
+// This code is currently not being maintained anymore. Occasionally new heroes might
+// be added, but not much more. Feel free to fork and update the app as per the MIT
+// license.
+
 var dotaGrid = (function (dg) {
 
     dg.Hero = function(row, col, hero) {
