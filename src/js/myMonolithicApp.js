@@ -282,7 +282,7 @@ var dotaGrid = (function (dg) {
         self.loadDefault = function() { LoadTemplate(globalTemplates.Default); };
         self.loadColorBased = function() { LoadTemplate(globalTemplates.ColorBased); };
         self.loadRoleAndAttack = function() { LoadTemplate(globalTemplates.RolesAndAttackType); };
-        self.loadMostPlayed = function() { LoadTemplate(globalTemplates.MostPlayed681b); };
+        self.loadMostPlayed = function() { LoadTemplate(globalTemplates.MostPlayed683c); };
         
         LoadTemplate(globalTemplates.Default);
     };
